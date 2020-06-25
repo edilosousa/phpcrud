@@ -31,7 +31,7 @@ class Colaboradores
 
     function excluirColaborador($id)
     {
-        $sql = "DELETE FROM colaboradores WHERE id=?";
+        $sql = "DELETE FROM " . $this->table_name . " WHERE id=?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$id]);
         echo $stmt->rowCount();
@@ -39,14 +39,14 @@ class Colaboradores
 
     function saveNovoColaborador($nome, $telefone, $empresa, $setor, $email, $cargo)
     {
-        $sql = "INSERT INTO colaboradores (nome,telefone,empresa,setor,email,cargo) VALUES (?,?,?,?,?,?)";
+        $sql = "INSERT INTO " . $this->table_name . " (nome,telefone,empresa,setor,email,cargo) VALUES (?,?,?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$nome, $telefone, $empresa, $setor, $email, $cargo]);
         echo $stmt->rowCount();
     }
 
     function dadosGraficoColaborador(){
-        $colaboradores = $this->conn->query('SELECT cargo,COUNT(*) as qtd FROM colaboradores GROUP BY cargo ORDER BY cargo asc');
+        $colaboradores = $this->conn->query("SELECT cargo,COUNT(*) as qtd FROM " . $this->table_name . " GROUP BY cargo ORDER BY cargo asc");
         return $colaboradores;
     }
 }
