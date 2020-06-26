@@ -56,30 +56,50 @@ define("URL", "http://localhost/phpcrud/phpcrud/");
         var setor = $('#setor').val();
         var email = $('#email').val();
         var cargo = $('#cargo').val();
-        $.ajax({
-            type: "POST",
-            url: "http://localhost/phpcrud/phpcrud/php/salvarNovoColaborador.php",
-            data: {
-                nome: nome,
-                telefone: telefone,
-                empresa: empresa,
-                setor: setor,
-                email: email,
-                cargo: cargo
-            },
-            success: function(resultado) {
-                if (resultado === '1') {
-                    alert('Colaborador salvo com sucesso');
-                    setTimeout(function() {
-                        window.location.replace("http://localhost/phpcrud/phpcrud/views/colaboradores/colaboradores.php");
-                    }, 1000);
-                } else if (resultado === '2') {
-                    alert('Colaborador não foi salvo!');
-                } else {
-                    alert('Erro a salvar os dados!');
+        if (nome === "") {
+            alert("Nome é obrigatório");
+            $('#nome').focus();
+        } else if(telefone === ""){
+            alert("Telefone é obrigatório");
+            $('#telefone').focus();
+        } else if(empresa === ""){
+            alert("Empresa é obrigatório");
+            $('#empresa').focus();
+        } else if(setor === ""){
+            alert("Setor é obrigatório");
+            $('#setor').focus();
+        } else if(email === ""){
+            alert("e-mail é obrigatório");
+            $('#email').focus();
+        } else if(cargo === ""){
+            alert("Cargo é obrigatório");
+            $('#cargo').focus();
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/phpcrud/phpcrud/php/salvarNovoColaborador.php",
+                data: {
+                    nome: nome,
+                    telefone: telefone,
+                    empresa: empresa,
+                    setor: setor,
+                    email: email,
+                    cargo: cargo
+                },
+                success: function(resultado) {
+                    if (resultado === '1') {
+                        alert('Colaborador salvo com sucesso');
+                        setTimeout(function() {
+                            window.location.replace("http://localhost/phpcrud/phpcrud/views/colaboradores/colaboradores.php");
+                        }, 1000);
+                    } else if (resultado === '2') {
+                        alert('Colaborador não foi salvo!');
+                    } else {
+                        alert('Erro a salvar os dados!');
+                    }
                 }
-            }
-        });
+            });
+        }
     });
 </script>
 

@@ -1,4 +1,5 @@
 <?php
+
 include_once '../../class/colaborador.class.php';
 include_once '../../config/conexao.php';
 define("URL","http://localhost/phpcrud/phpcrud/");

@@ -1,19 +1,13 @@
 <?php
 include_once 'config/conexao.php';
 include_once 'class/colaborador.class.php';
-define("URL","http://localhost/phpcrud/phpcrud/");
+define("URL", "http://localhost/phpcrud/phpcrud/");
 
 $database = new Database();
 $db = $database->getConnection();
 $colaborador = new Colaboradores($db);
 $retorno = $colaborador->dadosGraficoColaborador();
 ?>
-
-<!-- $data = $conn->query('SELECT * FROM colaboradores');
-
-foreach ($data as $row) :
-     print_r($row);
-endforeach; -->
 
 <!doctype html>
 <html lang="pt">
@@ -30,14 +24,15 @@ endforeach; -->
 <body class="bg-dark">
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-light bg-primary mt-2 rounded">
-            <span class="btn btn-info"  href="#">Digiboard</span>
-            <a class="navbar-brand ml-3"href="<?=URL?>index.php">Home</a>
-            <a class="navbar-brand"     href="<?=URL?>views/colaboradores/colaboradores.php">Colaboradores</a>
+            <span class="btn btn-info" href="#">Digiboard</span>
+            <a class="navbar-brand ml-3" href="<?= URL ?>index.php">Home</a>
+            <a class="navbar-brand" href="<?= URL ?>views/colaboradores/colaboradores.php">Colaboradores</a>
             <a class="navbar-brand" href="<?= URL ?>views/colaboradores/cadastrarColaborador.php">Cadastrar</a>
         </nav>
 
         <div class="row mt-5 ml-1 mr-1 bg-light rounded">
             <div class="col-sm-12 text-center">
+
                 <p class="text-info font-weight-bold">Gráfico de quantidade de colaboradores por cargo.</p>
             </div>
             <div class="col-sm-12 mt-4">
@@ -45,9 +40,14 @@ endforeach; -->
             </div>
 
             <?php
+            $cargo = '';
+            $qtd = '';
             foreach ($retorno as $row) :
-                $row['cargo'];
+                $cargo = $cargo . "'" . $row['cargo'] . "',";
+                $qtd = $qtd . "" . $row['qtd'] . ",";
             endforeach;
+            $cargo = trim($cargo, ",");
+            $qtd = trim($qtd, ",");
             ?>
 
             <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -64,39 +64,13 @@ endforeach; -->
                 });
 
                 function capturarDados() {
-                    var cargo = [];
-                    var qtd = [];
-                    $.ajax({
-                        type: "POST",
-                        url: "http://localhost/phpcrud/phpcrud/php/graficodb.php",
-                        data: {},
-                        success: function(resultado) {
-                            console.log(resultado);
-                            result = resultado;
-                            for (var i in resultado) {
-                                cargo.push(resultado[i].cargo);
-                                qtd.push(resultado[i]);
-                            }
-                        }
-                    });
-
-                    let nomes = [];
-                    let valores = [];
-                    let json = JSON.parse('{ "jose":1 , "maria":2, "joão":3 , "pedro":4}');
-                    // percorre o json
-                    for (let i in json) {
-                        // adiciona na array nomes a key do campo do json
-                        nomes.push(i);
-                        // adiciona na array de valore o value do campo do json
-                        valores.push(json[i]);
-                    }
                     var ctx = document.getElementById('myChart').getContext('2d');
                     var myChart = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: nomes,
+                            labels: [<?= $cargo ?>],
                             datasets: [{
-                                data: valores,
+                                data: [<?= $qtd ?>],
                                 backgroundColor: [
                                     'rgba(255, 99, 132, 0.2)',
                                     'rgba(54, 162, 235, 0.2)',
@@ -117,6 +91,9 @@ endforeach; -->
                             }]
                         },
                         options: {
+                            legend: {
+                                display: false
+                            },
                             scales: {
                                 yAxes: [{
                                     ticks: {
